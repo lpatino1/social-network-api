@@ -30,5 +30,11 @@ module.exports = {
         User.findByIdAndDelete({_id: req.params.userId})
         .then (console.log("Successfully deleted User"))
         .catch((err)=>res.status(500).json(err));
+    },
+    createFriend(req, res){
+
+    },
+    deleteFriend(req, res){
+        
     }
 };
