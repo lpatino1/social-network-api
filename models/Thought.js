@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const User = require('./User');
 
 
 //defines the shape for the reaction subdocument
@@ -9,7 +10,7 @@ const reactionSchema= new mongoose.Schema({
         maxLength: [280, 'Cannot exceed 280 characters, {VALUE}']
     },
     username: {type: String, required: true},
-    createdAt: {timestamps: true},
+    createdAt: {type: Date, default: Date.now}
 })
 
 //model for Thoughts
@@ -20,7 +21,7 @@ const thoughtSchema = new mongoose.Schema({
         minLength:[1], 
         maxLength:[280, 'Cannot exceed 280 characters, {VALUE}']
         },
-    createdAt: {timestamps: true},
+    createdAt: {type: Date, default: Date.now},
     username: {type: String, required: true},
     reactions: [reactionSchema],
     },

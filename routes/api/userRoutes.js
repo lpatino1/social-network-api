@@ -6,7 +6,9 @@ const {getUsers, getSingleUser, createUser, updateUser, deleteUser, createFriend
 //get routes post routes for /api/users route
 router.route('/').get(getUsers).get(getSingleUser).post(createUser).put(updateUser).delete(deleteUser);
 
+router.route('/:userId').get(getSingleUser).put(updateUser).delete(deleteUser);
+
 //do I want /:userID here?
-router.route('/:userId/friends').post(createFriend).delete(deleteFriend);
+router.route('/:userId/friends/:friendId').post(createFriend).delete(deleteFriend);
 
 module.exports = router;

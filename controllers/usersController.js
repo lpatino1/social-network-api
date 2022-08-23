@@ -28,13 +28,46 @@ module.exports = {
     },
     deleteUser(req, res){
         User.findByIdAndDelete({_id: req.params.userId})
-        .then (console.log("Successfully deleted User"))
+        .then ((user)=>
+            !user
+                ? res.status(404).json({ message: 'No user with this id!' })
+                : Thought.findOneAndRemove(
+                    {_Id: req.params.thoughtId }
+                )
+        )
         .catch((err)=>res.status(500).json(err));
     },
     createFriend(req, res){
-
+        User.findOneAndUpdate(
+            {_id: req.params.userId},
+            {$addToSet: {friends: req.params.friendId}},
+            {new: true}
+        )
+        .then((user) =>
+        !user
+          ? res.status(404).json({ message: 'No user with this id!' })
+          : res.json(user)
+      )
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
     },
     deleteFriend(req, res){
+        User.findOneAndUpdate(
+            {_id: req.params.userId},
+            {$pull: {friends: {friendId: req.params.friendId}}},
+            {new: true}
+        )
+        .then((user) =>
+        !user
+          ? res.status(404).json({ message: 'No user with this id!' })
+          : res.json(user)
+      )
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
         
     }
 };
