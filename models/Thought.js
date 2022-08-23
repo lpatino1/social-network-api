@@ -4,6 +4,10 @@ const User = require('./User');
 
 //defines the shape for the reaction subdocument
 const reactionSchema= new mongoose.Schema({
+    reactionId: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: ()=> new Types.ObjectId(),
+    },
     reactionBody: {
         type: String,
         required: true,

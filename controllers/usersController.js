@@ -22,7 +22,7 @@ module.exports = {
         
     },
     updateUser(req,res){
-        User.findByIdAndUpdate({_id: req.params.userId}, {$set: {user: req.params.body}})
+        User.findOneAndUpdate({_id: req.params.userId}, {$set: req.body}, {new: true})
             .then((user)=> res.json(user))
             .catch((err)=>res.status(500).json(err));
     },
@@ -40,7 +40,7 @@ module.exports = {
     createFriend(req, res){
         User.findOneAndUpdate(
             {_id: req.params.userId},
-            {$addToSet: {friends: req.params.friendId}},
+            {$addToSet: {friends: req.body.userId}},
             {new: true}
         )
         .then((user) =>
@@ -54,16 +54,19 @@ module.exports = {
       });
     },
     deleteFriend(req, res){
-        User.findOneAndUpdate(
-            {_id: req.params.userId},
-            {$pull: {friends: {friendId: req.params.friendId}}},
-            {new: true}
-        )
+        User.findById(req.params.userId)
         .then((user) =>
         !user
           ? res.status(404).json({ message: 'No user with this id!' })
-          : res.json(user)
-      )
+          : User.findOneAndUpdate(
+            {friends: req.params.friendId},
+            {$pull: {friends:  req.params.friendId}},
+            {new: true}
+          )
+        )
+        .then((user)=>
+        res.json({message: 'Friend successfully deleted'})
+        )
       .catch((err) => {
         console.log(err);
         res.status(500).json(err);

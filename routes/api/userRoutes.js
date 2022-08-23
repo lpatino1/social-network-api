@@ -8,7 +8,9 @@ router.route('/').get(getUsers).get(getSingleUser).post(createUser).put(updateUs
 
 router.route('/:userId').get(getSingleUser).put(updateUser).delete(deleteUser);
 
-//do I want /:userID here?
-router.route('/:userId/friends/:friendId').post(createFriend).delete(deleteFriend);
+
+router.route('/:userId/friends').post(createFriend);
+
+router.route('/:userId/friends/:friendId').put(deleteFriend);
 
 module.exports = router;
